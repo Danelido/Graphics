@@ -29,7 +29,7 @@ namespace CreateMatrix {
 	/* FOV = 45 */
 	static glm::mat4 PerspectiveProjectionMatrix(float screenWidth, float screenHeight, float near, float far)
 	{
-		return glm::perspective(glm::radians(45.f), screenWidth / screenHeight, 0.1f, 200.f);
+		return glm::perspective(glm::radians(45.f), screenWidth / screenHeight, near, far);
 	}
 
 }

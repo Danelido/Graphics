@@ -4,6 +4,8 @@
 
 class Camera {
 private:
+	bool p_cameraActive;
+
 	glm::vec3 p_position;
 	
 	float p_pitch;

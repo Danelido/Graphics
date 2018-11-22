@@ -7,14 +7,14 @@
 class OBJModel {
 
 private:
-	RawMesh* p_rawMesh;
-	MeshTexture* p_meshTexture;
+	const RawMesh* p_rawMesh;
+	const MeshTexture* p_meshTexture;
 	ParserOBJ* parser;
 public:
 	
 	OBJModel() = delete;
 	OBJModel(const OBJModel& object) = delete;
-	OBJModel(const std::string& objFile, const std::string& textureFile, MeshLoader* meshLoader);
+	OBJModel(const std::string& objFile, const std::string& textureFile);
 	virtual ~OBJModel();
 
 	const RawMesh* rawMesh() const;

@@ -10,7 +10,7 @@ Camera::Camera(const glm::vec3 & position)
 	this->p_roll = 0.f;
 	this->p_sensitivity = 0.1f;
 	this->p_movementSpeed = 50.f;
-
+	this->p_cameraActive = true;
 	glfwSetCursorPos(glfwGetCurrentContext(), 1280.f / 2.f, 720.f / 2.f);
 	glfwGetCursorPos(glfwGetCurrentContext(), &this->p_lastMousePos.x, &this->p_lastMousePos.y);
 
@@ -22,6 +22,23 @@ Camera::~Camera()
 
 void Camera::update(const float & dt)
 {
+
+	if (InputManager::isKeyPressed(GLFW_KEY_C))
+	{
+		if (!p_cameraActive)
+		{
+			glfwSetCursorPos(glfwGetCurrentContext(), 1280.f / 2.f, 720.f / 2.f);
+			glfwGetCursorPos(glfwGetCurrentContext(), &this->p_currentMousePos.x, &this->p_currentMousePos.y);
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else
+		{
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+		p_cameraActive = !p_cameraActive;
+	}
+
 	// move
 	if (InputManager::isKeyHeldDown(GLFW_KEY_W)) {
 		this->p_position.z -= glm::cos(this->p_yaw) * this->p_movementSpeed * dt;
@@ -51,34 +68,35 @@ void Camera::update(const float & dt)
 		this->p_position.y -= this->p_movementSpeed * dt;
 	}
 
-	if (InputManager::window_focused)
-	{
-		glfwGetCursorPos(glfwGetCurrentContext(), &this->p_currentMousePos.x, &this->p_currentMousePos.y);
-		glm::vec2 vel = this->p_currentMousePos - this->p_lastMousePos;
-		glfwSetCursorPos(glfwGetCurrentContext(), 1280.f / 2.f, 720.f / 2.f);
-		glfwGetCursorPos(glfwGetCurrentContext(), &this->p_currentMousePos.x, &this->p_currentMousePos.y);
-		this->p_lastMousePos = this->p_currentMousePos;
+	if (p_cameraActive) {
+		if (InputManager::window_focused)
+		{
+			glfwGetCursorPos(glfwGetCurrentContext(), &this->p_currentMousePos.x, &this->p_currentMousePos.y);
+			glm::vec2 vel = this->p_currentMousePos - this->p_lastMousePos;
+			glfwSetCursorPos(glfwGetCurrentContext(), 1280.f / 2.f, 720.f / 2.f);
+			glfwGetCursorPos(glfwGetCurrentContext(), &this->p_currentMousePos.x, &this->p_currentMousePos.y);
+			this->p_lastMousePos = this->p_currentMousePos;
 
-		this->p_yaw += this->p_sensitivity * vel.x * 0.01f;
-		this->p_pitch += this->p_sensitivity* vel.y  * 0.01f;
-	}
-	if (this->p_pitch >= 1.f)
-	{
-		this->p_pitch = 1.f;
-	}
-	else if (this->p_pitch <= -1.f)
-	{
-		this->p_pitch = -1.f;
-	}
+			this->p_yaw += this->p_sensitivity * vel.x * 0.01f;
+			this->p_pitch += this->p_sensitivity* vel.y  * 0.01f;
+		}
+		if (this->p_pitch >= 1.f)
+		{
+			this->p_pitch = 1.f;
+		}
+		else if (this->p_pitch <= -1.f)
+		{
+			this->p_pitch = -1.f;
+		}
 
-	// Do a barrel roll
-	if (InputManager::isKeyHeldDown(GLFW_KEY_G)) {
-		this->p_roll += this->p_movementSpeed * dt;
+		// Do a barrel roll
+		if (InputManager::isKeyHeldDown(GLFW_KEY_G)) {
+			this->p_roll += this->p_movementSpeed * dt;
+		}
+		if (InputManager::isKeyHeldDown(GLFW_KEY_H)) {
+			this->p_roll -= this->p_movementSpeed * dt;
+		}
 	}
-	if (InputManager::isKeyHeldDown(GLFW_KEY_H)) {
-		this->p_roll -= this->p_movementSpeed * dt;
-	}
-
 }
 
 void Camera::setMouseSensitivity(const float & sen)

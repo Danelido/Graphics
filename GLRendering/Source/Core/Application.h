@@ -16,7 +16,6 @@ private:
 	Scene*		p_scene;
 	
 	InputManager* p_inputManager;
-	double calcFPS(double theTimeInterval, std::string theWindowTitle);
 	// For delta
 	double p_currentFrame;
 	double p_deltaTime;

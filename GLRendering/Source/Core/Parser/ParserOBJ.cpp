@@ -106,9 +106,6 @@ bool ParserOBJ::loadFromFile(const std::string & filename)
 
 	file.close();
 
-#ifdef _DEBUG
-	printf("Loaded obj file: %s\n", filename.c_str());
-#endif
 	fillBuffer_vertices.clear();
 	fillBuffer_textureCoordinates.clear();
 	fillBuffer_normals.clear();

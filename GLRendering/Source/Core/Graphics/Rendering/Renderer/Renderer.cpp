@@ -4,9 +4,9 @@
 Renderer::Renderer()
 {
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.0f, 0.3f, 0.7f, 1.0f);
+	glEnable(GL_MULTISAMPLE);
 	enableCulling();
-	this->p_skyColor = glm::vec3(0.45f, 0.95f, 0.20f);
+	this->p_skyColor = glm::vec3(0.45f, 0.3f, 0.60f);
 	this->p_gameObjectShader = new GameObjectShader();
 	this->p_gameObjectShader->use();
 	this->p_gameObjectShader->setProjectionMatrix(CreateMatrix::PerspectiveProjectionMatrix(1280.f, 720.f, 0.1f, 1000.f));
@@ -26,11 +26,8 @@ void Renderer::processGameObject(const GameObject* gameObject)
 	if (p_gameObjectMap.find(gameObject->getModel()) == p_gameObjectMap.end()) {
 		// Create a new array for this VAO
 		std::vector<const GameObject*> newVec;
-		newVec.reserve(10000);
 		newVec.emplace_back(gameObject);
 		this->p_gameObjectMap[gameObject->getModel()] = newVec;
-
-		
 	}
 	else {
 		// Add it to the existing array
@@ -56,6 +53,16 @@ void Renderer::render(const Camera & camera)
 	this->p_gameObjectShader->unuse();
 	
 	this->p_gameObjectMap.clear();
+}
+
+void Renderer::setSkyColor(glm::vec3 skyCol)
+{
+	glClearColor(skyCol.r, skyCol.g, skyCol.b, 1.0f);
+}
+
+const glm::vec3 Renderer::getSkyColor() const
+{
+	return this->p_skyColor;
 }
 
 void Renderer::enableCulling()

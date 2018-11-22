@@ -23,6 +23,9 @@ public:
 	void processGameObject(const GameObject* gameObject);
 	void render(const Camera& camera);
 
+	void setSkyColor(glm::vec3 skyCol);
+	const glm::vec3 getSkyColor() const;
+
 	static void enableCulling();
 	static void disableCulling();
 
