@@ -9,6 +9,22 @@ GameObjectShader::GameObjectShader()
 	modelMatrixLocation = glGetUniformLocation(this->program(), "modelMatrix");
 	viewMatrixLocation = glGetUniformLocation(this->program(), "viewMatrix");
 	projectionMatrixLocation = glGetUniformLocation(this->program(), "projectionMatrix");
+	cameraPositionLocation = glGetUniformLocation(this->program(), "cameraPosition");
+	skyColorLocation = glGetUniformLocation(this->program(), "skyColor");
+	numberOfLightLocation = glGetUniformLocation(this->program(), "numberOfLights");
+
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		std::string posLoc = "lights[" + std::to_string(i) + "].lightPosition";
+		std::string colLoc = "lights[" + std::to_string(i) + "].lightColor";
+		
+		LightBlock block;
+		block.positionLocation = glGetUniformLocation(this->program(), posLoc.c_str());
+		block.colorLocation = glGetUniformLocation(this->program(), colLoc.c_str());
+		
+		lightMap[i] = block;
+	}
+
 
 }
 
@@ -29,4 +45,33 @@ void GameObjectShader::setViewMatrix(const glm::mat4 & view)
 void GameObjectShader::setProjectionMatrix(const glm::mat4 & projection)
 {
 	glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projection[0][0]);
+}
+
+void GameObjectShader::setCameraPosition(const glm::vec3 & cameraPos)
+{
+	glUniform3f(cameraPositionLocation, cameraPos.x, cameraPos.y, cameraPos.z);
+}
+
+void GameObjectShader::processLights(const std::vector<Light*>* lights)
+{
+
+	glUniform1i(numberOfLightLocation, (int)(lights->size()));
+
+	for (int i = 0; i < lights->size(); i++)
+	{
+		glUniform3f(lightMap[i].positionLocation,
+			lights->at(i)->getPosition().x,
+			lights->at(i)->getPosition().y,
+			lights->at(i)->getPosition().z);
+
+		glUniform3f(lightMap[i].colorLocation,
+			lights->at(i)->getLightColor().x,
+			lights->at(i)->getLightColor().y,
+			lights->at(i)->getLightColor().z);
+	}
+}
+
+void GameObjectShader::setSkyColor(const glm::vec3 & skyCol)
+{
+	glUniform3f(skyColorLocation, skyCol.x, skyCol.y, skyCol.z);
 }

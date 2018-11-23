@@ -1,6 +1,6 @@
 #include "ShaderClass.h"
 #include <fstream>
-
+#include <vector>
 bool ShaderClass::loadShadersFromFile(const char * vertexShaderFilePath, const char * fragmentShaderFilePath)
 {
 	std::string vertexData = getDataFromFile(vertexShaderFilePath);
@@ -37,6 +37,23 @@ void ShaderClass::createProgramAndLinkShaders(const GLuint& vs, const GLuint& fs
 	glAttachShader(this->p_program, vs);
 	glAttachShader(this->p_program, fs);
 	glLinkProgram(this->p_program);
+
+	GLint isLinked = 0;
+	glGetProgramiv(this->p_program, GL_LINK_STATUS, &isLinked);
+	if (isLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(this->p_program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		// The maxLength includes the NULL character
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(this->p_program, maxLength, &maxLength, &infoLog[0]);
+		printf("%s\n", infoLog.data());
+		// The program is useless now. So delete it.
+		glDeleteProgram(this->p_program);
+
+	}
+
 }
 
 bool ShaderClass::errorReadingData(GLuint shader)

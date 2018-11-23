@@ -3,6 +3,7 @@
 #include "../OBJModel.h"
 #include "../../../Camera/Camera.h"
 #include "../../../GameObject/GameObject.h"
+#include "../../../GameObject/Light/Light.h"
 #include "../../Shaders/GameObjectShader.h"
 #include "SubRenderers/GORenderModule.h"
 #include <GLM/glm.hpp>
@@ -21,7 +22,7 @@ public:
 	virtual ~Renderer();
 
 	void processGameObject(const GameObject* gameObject);
-	void render(const Camera& camera);
+	void render(const Camera& camera, const std::vector<Light*>* lights = nullptr);
 
 	void setSkyColor(glm::vec3 skyCol);
 	const glm::vec3 getSkyColor() const;

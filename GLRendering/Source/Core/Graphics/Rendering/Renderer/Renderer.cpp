@@ -27,7 +27,7 @@ void Renderer::processGameObject(const GameObject* gameObject)
 		// Create a new array for this VAO
 		std::vector<const GameObject*> newVec;
 		newVec.emplace_back(gameObject);
-		this->p_gameObjectMap[gameObject->getModel()] = newVec;
+		this->p_gameObjectMap.emplace(gameObject->getModel(), newVec);
 	}
 	else {
 		// Add it to the existing array
@@ -37,19 +37,24 @@ void Renderer::processGameObject(const GameObject* gameObject)
 	
 }
 
-void Renderer::render(const Camera & camera)
+void Renderer::render(const Camera & camera, const std::vector<Light*>* lights)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Use entity shader
 	this->p_gameObjectShader->use();
-	// send skycolor to shader for fog?
-	// set potential light source
-	// set the viewmatrix
+	
+	if (lights)
+	{
+		this->p_gameObjectShader->processLights(lights);
+	}
+
+	this->p_gameObjectShader->setCameraPosition(camera.getPosition());
+	this->p_gameObjectShader->setSkyColor(p_skyColor);
 	this->p_gameObjectShader->setViewMatrix(CreateMatrix::viewMatrix(camera));
-	// entityRenderModule.render(send in map)
+
 	this->p_goRenderModule->render(this->p_gameObjectMap);
-	// unuse entity shader
+	
 	this->p_gameObjectShader->unuse();
 	
 	this->p_gameObjectMap.clear();
@@ -58,6 +63,7 @@ void Renderer::render(const Camera & camera)
 void Renderer::setSkyColor(glm::vec3 skyCol)
 {
 	glClearColor(skyCol.r, skyCol.g, skyCol.b, 1.0f);
+	this->p_skyColor = skyCol;
 }
 
 const glm::vec3 Renderer::getSkyColor() const

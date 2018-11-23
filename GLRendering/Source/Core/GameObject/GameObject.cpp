@@ -6,6 +6,7 @@ GameObject::GameObject(const std::string& objFile, const std::string& texFile, g
 	p_position = position;
 	p_rotation = rotation;
 	p_scale = scale;
+	p_light = nullptr;
 }
 
 GameObject::~GameObject()
@@ -33,6 +34,12 @@ void GameObject::setScale(float scale)
 	this->p_scale = scale;
 }
 
+void GameObject::attachLight(Light * light)
+{
+	this->p_light = light;
+	light->setOwner(this);
+}
+
 const glm::vec3 & GameObject::getPosition() const
 {
 	return this->p_position;
@@ -43,15 +50,12 @@ const glm::vec3 & GameObject::getRotation() const
 	return this->p_rotation;
 }
 
-const glm::vec3 GameObject::getCenter() const
-{
-	glm::vec4 center = glm::vec4(p_position, 1.0f) * (p_scale * 0.5f);
-	center = center * CreateMatrix::modelMatrix(p_position, p_rotation, p_scale);
-	return glm::vec3(center.x, center.y, center.z);
-
-}
-
 const float & GameObject::getScale() const
 {
 	return this->p_scale;
+}
+
+Light* GameObject::getAttachedLight()
+{
+	return p_light;
 }

@@ -5,6 +5,7 @@
 #include "../Core/Camera/Camera.h"
 #include "../Core/Graphics/Rendering/Renderer/Renderer.h"
 #include "../Core/GameObject/GameObjectManager.h"
+#include "../Core/GameObject/Light/LightManager.h"
 
 class Tryouts : public Scene
 {
@@ -13,6 +14,7 @@ private:
 	Camera* camera;
 	Renderer* renderer;
 	GameObjectManager* objectManager;
+	LightManager* lightManager;
 	glm::vec3 p_skyColor;
 	bool Vsync;
 

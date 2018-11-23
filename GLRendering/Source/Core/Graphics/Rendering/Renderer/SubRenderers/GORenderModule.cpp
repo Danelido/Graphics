@@ -34,7 +34,7 @@ void GORenderModule::prepareModel(const OBJModel * model)
 	CHECKGLERROR(glBindVertexArray(model->rawMesh()->getVAO()));
 
 	for (size_t i = 0; i < 3; i++) {
-		CHECKGLERROR(glEnableVertexAttribArray(i));
+		CHECKGLERROR(glEnableVertexAttribArray(static_cast<GLint>(i)));
 	}
 	if (model->meshTexture()->hasTransparency())
 		Renderer::disableCulling();
@@ -47,7 +47,7 @@ void GORenderModule::doneWithModel()
 {
 	Renderer::enableCulling();
 	for (size_t i = 0; i < 3; i++) {
-		CHECKGLERROR(glDisableVertexAttribArray(i));
+		CHECKGLERROR(glDisableVertexAttribArray(static_cast<GLint>(i)));
 	}
 	CHECKGLERROR(glBindVertexArray(NULL));
 }

@@ -45,7 +45,7 @@ bool GameObjectManager::addObject(GameObject * object)
 	return true;
 }
 
-const size_t & GameObjectManager::getNrOfGameObjects() const
+const size_t GameObjectManager::getNrOfGameObjects() const
 {
 	return this->p_gameObjects.size();
 }

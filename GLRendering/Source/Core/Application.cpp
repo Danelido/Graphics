@@ -111,7 +111,7 @@ void Application::run()
 		this->p_deltaTime = this->p_currentFrame - this->p_lastFrame;
 		this->p_lastFrame = this->p_currentFrame;
 		
-		this->p_scene = this->p_scene->update(p_deltaTime);
+		this->p_scene = this->p_scene->update(static_cast<float>(p_deltaTime));
 		if (this->p_scene == nullptr) 
 		{
 			glfwSetWindowShouldClose(this->p_window, -1);

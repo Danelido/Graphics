@@ -17,7 +17,7 @@ public:
 	void render(Camera* camera, Renderer* renderer);
 
 	bool addObject(GameObject* object);
-	const size_t& getNrOfGameObjects() const;
+	const size_t getNrOfGameObjects() const;
 
 private:
 	std::vector<GameObject*> p_gameObjects;

@@ -88,14 +88,6 @@ void Camera::update(const float & dt)
 		{
 			this->p_pitch = -1.f;
 		}
-
-		// Do a barrel roll
-		if (InputManager::isKeyHeldDown(GLFW_KEY_G)) {
-			this->p_roll += this->p_movementSpeed * dt;
-		}
-		if (InputManager::isKeyHeldDown(GLFW_KEY_H)) {
-			this->p_roll -= this->p_movementSpeed * dt;
-		}
 	}
 }
 
