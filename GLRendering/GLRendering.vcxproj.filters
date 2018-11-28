@@ -108,6 +108,9 @@
     <ClCompile Include="Source\Core\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\GameObject\Objects\Worldplane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Camera\Camera.h">
@@ -218,15 +221,14 @@
     <ClInclude Include="Source\Core\Application.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\GameObject\Objects\WorldPlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="Shaders\FragmentShader.glsl" />
     <None Include="Shaders\GameObjectFragment.glsl" />
     <None Include="Shaders\GameObjectVertex.glsl" />
-    <None Include="Shaders\TestFrag.glsl" />
-    <None Include="Shaders\TestVert.glsl" />
-    <None Include="Shaders\VertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\Bear.png">

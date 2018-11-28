@@ -10,11 +10,20 @@ class GameObject {
 private:
 	OBJModel* p_model;
 	Light* p_light;
+
+	// Cached
+	const bool shouldUpdateModelMatrix();
+	glm::mat4 p_cachedModelMatrix;
+	glm::vec3 p_lastPosition;
+	glm::vec3 p_lastRotation;
+	float p_lastScale;
+
+
 protected:
 	glm::vec3 p_position;
 	glm::vec3 p_rotation;
 	float p_scale;
-
+	
 	Light* getAttachedLight();
 public:
 
@@ -30,10 +39,11 @@ public:
 	void setScale(float scale);
 	void attachLight(Light* light);
 
+	glm::mat4& getModelMatrix();
 	const glm::vec3& getPosition() const;
 	const glm::vec3& getRotation() const;
 	const float& getScale() const;
-
+	const bool hasLightAttached() const;
 
 
 };

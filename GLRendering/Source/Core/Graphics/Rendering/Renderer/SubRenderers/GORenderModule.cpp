@@ -13,19 +13,25 @@ GORenderModule::~GORenderModule()
 
 }
 
-void GORenderModule::render(const std::map<const OBJModel*, std::vector<const GameObject*>>& gameObjects)
+void GORenderModule::render(const std::map<const OBJModel*, std::vector<GameObject*>>& gameObjects)
 {
-
+	p_totalVertices = 0;
 	for (auto const &map : gameObjects) {
 		prepareModel(map.first);
 
 		for (auto& gameObject : map.second) {
+			p_totalVertices += map.first->rawMesh()->getNumVertices();
 			setUpModelMatrix(gameObject);
 			CHECKGLERROR(glDrawElements(GL_TRIANGLES, map.first->rawMesh()->getNumVertices(), GL_UNSIGNED_INT, NULL));
 		}
 
 		doneWithModel();
 	}
+}
+
+const long int & GORenderModule::totalNrOfVertices() const
+{
+	return this->p_totalVertices;
 }
 
 void GORenderModule::prepareModel(const OBJModel * model)
@@ -52,13 +58,7 @@ void GORenderModule::doneWithModel()
 	CHECKGLERROR(glBindVertexArray(NULL));
 }
 
-void GORenderModule::setUpModelMatrix(const GameObject* gameObject)
+void GORenderModule::setUpModelMatrix(GameObject* gameObject)
 {
-	glm::mat4 modelMatrix = CreateMatrix::modelMatrix(
-		gameObject->getPosition(),
-		gameObject->getRotation(),
-		gameObject->getScale()
-	);
-
-	this->p_shader->setModelMatrix(modelMatrix);
+	this->p_shader->setModelMatrix(gameObject->getModelMatrix());
 }

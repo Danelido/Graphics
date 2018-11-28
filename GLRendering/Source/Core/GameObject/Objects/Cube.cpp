@@ -1,7 +1,7 @@
 #include "Cube.h"
 
 Cube::Cube(glm::vec3 position, glm::vec3 rotation, float scale) :
-	GameObject("box.obj", "LightWood.png", position, rotation, scale)
+	GameObject("box.obj", "RTS_Crate.png", position, rotation, scale)
 
 {
 

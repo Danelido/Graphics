@@ -2,7 +2,7 @@
 #include "../../Input/InputManager.h"
 
 LightCube::LightCube(glm::vec3 position, glm::vec3 rotation, float scale) :
-	GameObject("box.obj", "TempTexture.png", position, rotation, scale)
+	GameObject("sphere.obj", "White.png", position, rotation, scale)
 {
 }
 

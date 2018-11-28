@@ -12,6 +12,9 @@ GameObjectShader::GameObjectShader()
 	cameraPositionLocation = glGetUniformLocation(this->program(), "cameraPosition");
 	skyColorLocation = glGetUniformLocation(this->program(), "skyColor");
 	numberOfLightLocation = glGetUniformLocation(this->program(), "numberOfLights");
+	fogStartLocation = glGetUniformLocation(this->program(), "u_fogStart");
+	fogEndLocation = glGetUniformLocation(this->program(), "u_fogEnd");
+
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
@@ -69,6 +72,16 @@ void GameObjectShader::processLights(const std::vector<Light*>* lights)
 			lights->at(i)->getLightColor().y,
 			lights->at(i)->getLightColor().z);
 	}
+}
+
+void GameObjectShader::setFogStart(const float & fogStart)
+{
+	glUniform1f(fogStartLocation, fogStart);
+}
+
+void GameObjectShader::setFogEnd(const float & fogEnd)
+{
+	glUniform1f(fogEndLocation, fogEnd);
 }
 
 void GameObjectShader::setSkyColor(const glm::vec3 & skyCol)

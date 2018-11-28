@@ -19,6 +19,9 @@ private:
 	GLint skyColorLocation;
 	GLint numberOfLightLocation;
 
+	GLint fogStartLocation;
+	GLint fogEndLocation;
+
 	struct LightBlock {
 		GLint positionLocation;
 		GLint colorLocation;
@@ -34,8 +37,8 @@ public:
 	void setProjectionMatrix(const glm::mat4& projection);
 	void setCameraPosition(const glm::vec3& cameraPos);
 	void processLights(const std::vector<Light*>* lights);
-	//void setLightPositon(const glm::vec3& lightPos);
-	//void setLightColor(const glm::vec3& lightCol);
+	void setFogStart(const float& fogStart);
+	void setFogEnd(const float& fogEnd);
 	void setSkyColor(const glm::vec3& skyCol);
 };
 

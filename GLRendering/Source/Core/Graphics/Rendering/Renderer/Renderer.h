@@ -15,18 +15,26 @@ private:
 	GORenderModule* p_goRenderModule;
 	GameObjectShader*	p_gameObjectShader;
 
-	std::map<const OBJModel*, std::vector<const GameObject*>> p_gameObjectMap;
+	std::map<const OBJModel*, std::vector<GameObject*>> p_gameObjectMap;
+
+	float fogStart;
+	float fogEnd;
+
 public:
 
 	Renderer();
 	virtual ~Renderer();
 
-	void processGameObject(const GameObject* gameObject);
+	const long int& getNrOfVertices() const;
+
+	void processGameObject(GameObject* gameObject);
 	void render(const Camera& camera, const std::vector<Light*>* lights = nullptr);
 
 	void setSkyColor(glm::vec3 skyCol);
 	const glm::vec3 getSkyColor() const;
 
+	void setFogStart(const float& fogStart);
+	void setFogEnd(const float& fogEnd);
 	static void enableCulling();
 	static void disableCulling();
 

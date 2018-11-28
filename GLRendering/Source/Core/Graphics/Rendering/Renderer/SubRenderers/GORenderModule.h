@@ -12,15 +12,19 @@ class GORenderModule {
 private:
 	GameObjectShader* p_shader;
 
+	long int p_totalVertices;
+
 	void prepareModel(const OBJModel* model);
 	void doneWithModel();
-	void setUpModelMatrix(const GameObject* gameObject);
+	void setUpModelMatrix(GameObject* gameObject);
 
 public:
 	GORenderModule(GameObjectShader* shader);
 	virtual ~GORenderModule();
 
-	void render(const std::map<const OBJModel*, std::vector<const GameObject*>>& gameObjects);
+	void render(const std::map<const OBJModel*, std::vector<GameObject*>>& gameObjects);
+
+	const long int& totalNrOfVertices() const;
 };
 
 #endif

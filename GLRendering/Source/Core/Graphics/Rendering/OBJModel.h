@@ -20,7 +20,7 @@ public:
 	const RawMesh* rawMesh() const;
 	const MeshTexture* meshTexture() const;
 
-
+	friend bool operator==(const OBJModel& m1, const OBJModel& m2);
 };
 
 

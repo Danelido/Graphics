@@ -6,12 +6,16 @@ Renderer::Renderer()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 	enableCulling();
-	this->p_skyColor = glm::vec3(0.45f, 0.3f, 0.60f);
+	fogStart = 0.f;
+	fogEnd = 0.f;
+	this->p_skyColor = glm::vec3(60.f / 255.f, 57.f / 255.f, 111.f / 255.f);
 	this->p_gameObjectShader = new GameObjectShader();
 	this->p_gameObjectShader->use();
 	this->p_gameObjectShader->setProjectionMatrix(CreateMatrix::PerspectiveProjectionMatrix(1280.f, 720.f, 0.1f, 1000.f));
 
 	p_goRenderModule = new GORenderModule(this->p_gameObjectShader);
+
+
 }
 
 Renderer::~Renderer()
@@ -20,20 +24,27 @@ Renderer::~Renderer()
 	delete this->p_gameObjectShader;
 }
 
-void Renderer::processGameObject(const GameObject* gameObject)
+const long int & Renderer::getNrOfVertices() const
+{
+	return this->p_goRenderModule->totalNrOfVertices();
+}
+
+void Renderer::processGameObject(GameObject* gameObject)
 {
 
-	if (p_gameObjectMap.find(gameObject->getModel()) == p_gameObjectMap.end()) {
-		// Create a new array for this VAO
-		std::vector<const GameObject*> newVec;
-		newVec.emplace_back(gameObject);
-		this->p_gameObjectMap.emplace(gameObject->getModel(), newVec);
+	for (auto& map : p_gameObjectMap)
+	{
+		if (*map.first == *gameObject->getModel())
+		{
+			map.second.emplace_back(gameObject);
+			return;
+		}
 	}
-	else {
-		// Add it to the existing array
-		std::vector<const GameObject*>& vec = p_gameObjectMap[gameObject->getModel()];
-		vec.emplace_back(gameObject);
-	}
+	// Create a new array for this VAO
+	std::vector<GameObject*> newVec;
+	newVec.emplace_back(gameObject);
+	this->p_gameObjectMap.emplace(gameObject->getModel(), newVec);
+	
 	
 }
 
@@ -43,7 +54,9 @@ void Renderer::render(const Camera & camera, const std::vector<Light*>* lights)
 
 	// Use entity shader
 	this->p_gameObjectShader->use();
-	
+	this->p_gameObjectShader->setFogStart(fogStart);
+	this->p_gameObjectShader->setFogEnd(fogEnd);
+
 	if (lights)
 	{
 		this->p_gameObjectShader->processLights(lights);
@@ -69,6 +82,16 @@ void Renderer::setSkyColor(glm::vec3 skyCol)
 const glm::vec3 Renderer::getSkyColor() const
 {
 	return this->p_skyColor;
+}
+
+void Renderer::setFogStart(const float & fogStart)
+{
+	this->fogStart = fogStart;
+}
+
+void Renderer::setFogEnd(const float & fogEnd)
+{
+	this->fogEnd = fogEnd;
 }
 
 void Renderer::enableCulling()

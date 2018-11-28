@@ -18,6 +18,9 @@ private:
 	glm::vec3 p_skyColor;
 	bool Vsync;
 
+	float fogStart;
+	float fogEnd;
+
 public:
 	Tryouts();
 	virtual ~Tryouts();

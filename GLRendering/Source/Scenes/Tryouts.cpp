@@ -16,14 +16,14 @@
 #include "../Core/GameObject/Objects/Cube.h"
 #include "../Core/GameObject/Objects/LightCube.h"
 #include "../Core/GameObject/Objects/StanfordDragon.h"
-
+#include "../Core/GameObject/Objects/WorldPlane.h"
 
 // https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Text_Rendering_01
 
 Tryouts::Tryouts()
 {
 	Vsync = true;
-	camera = new Camera(glm::vec3(0.f, 0.f, 0.f));
+	camera = new Camera(glm::vec3(0.f, 15.f, 0.f));
 	camera->setMouseSensitivity(0.25f);
 	camera->setMovementSpeed(50.f);
 	objectManager = new GameObjectManager();
@@ -31,54 +31,30 @@ Tryouts::Tryouts()
 	renderer = new Renderer();
 	p_skyColor = renderer->getSkyColor();
 		
-
-	/* TEST CODE */
-	objectManager->addObject(new Cube(glm::vec3(0.f, 0.f, -80.f), glm::vec3(0.f), 50.f));
+	objectManager->addObject(new WorldPlane());
+	float cubeScale = 6.f;
+	for (int i = 0; i < 100.f; i++)
+	{
+		objectManager->addObject(new Cube(
+			glm::vec3(RandomNum::getRandomNumber(-400.f, 400.f), cubeScale, RandomNum::getRandomNumber(-400.f, 400.f)),
+			glm::vec3(0.f),
+			cubeScale
+			));
+	}
 
 	// Create light
 	Light* tempLight = new Light();
+	tempLight->setLightColor(glm::vec3(1.f, 1.f, 159.f/255.f));
 	lightManager->addLight(tempLight);
 
 	// Create a game object and attach the light to it
-	GameObject* lightCube = new LightCube(glm::vec3(15.f, -15.f, -25.f), glm::vec3(0.f), 1.0f);
+	GameObject* lightCube = new LightCube(glm::vec3(15.f, 40.f, -200.f), glm::vec3(0.f), 2.f);
 	lightCube->attachLight(tempLight);
 	objectManager->addObject(lightCube);
+	
+	fogStart = 1.f;
+	fogEnd = 600.f;
 
-
-
-	// Create light
-	Light* tempLight2 = new Light();
-	tempLight2->setLightColor(glm::vec3(0.2f, 1.f, 0.2f));
-	lightManager->addLight(tempLight2);
-
-	// Create a game object and attach the light to it
-	GameObject* lightCube2 = new LightCube(glm::vec3(-15.f, -15.f, -25.f), glm::vec3(0.f), 1.0f);
-	lightCube2->attachLight(tempLight2);
-	objectManager->addObject(lightCube2);
-
-
-
-	// Create light
-	Light* tempLight3 = new Light();
-	tempLight3->setLightColor(glm::vec3(.8f, 0.f, 0.f));
-	lightManager->addLight(tempLight3);
-
-	// Create a game object and attach the light to it
-	GameObject* lightCube3 = new LightCube(glm::vec3(-15.f, 15.f, -25.f), glm::vec3(0.f), 1.0f);
-	lightCube3->attachLight(tempLight3);
-	objectManager->addObject(lightCube3);
-
-
-
-	// Create light
-	Light* tempLight4 = new Light();
-	tempLight4->setLightColor(glm::vec3(0.f, 0.8f, .8f));
-	lightManager->addLight(tempLight4);
-
-	// Create a game object and attach the light to it
-	GameObject* lightCube4 = new LightCube(glm::vec3(15.f, 15.f, -25.f), glm::vec3(0.f), 1.0f);
-	lightCube4->attachLight(tempLight4);
-	objectManager->addObject(lightCube4);
 }
 
 Tryouts::~Tryouts()
@@ -87,6 +63,7 @@ Tryouts::~Tryouts()
 	delete this->renderer;
 	delete this->objectManager;
 	delete this->lightManager;
+
 }
 
 Scene* Tryouts::handleEvent() 
@@ -101,9 +78,11 @@ Scene * Tryouts::renderImGui()
 	ImGui::Text("WASD = Move around");
 	ImGui::Text("X & Z = Move Up/Down");
 	ImGui::Text("World objects: %d", objectManager->getNrOfGameObjects());
+	ImGui::Text("Vertices being rendered: %d", renderer->getNrOfVertices());
 	ImGui::ColorEdit3("Clear color", (float*)&p_skyColor);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	
+	ImGui::SliderFloat("FogStart", &fogStart, 1.f, fogEnd);
+	ImGui::SliderFloat("FogEnd", &fogEnd, fogStart, 1000.f);
 	ImGui::Checkbox("Vsync", &Vsync);
 	ImGui::End();
 
@@ -131,6 +110,8 @@ Scene* Tryouts::render()
 	
 	// Final render call
 	renderer->setSkyColor(p_skyColor);
+	renderer->setFogStart(fogStart);
+	renderer->setFogEnd(fogEnd);
 	renderer->render(*camera, &lightManager->getLights());
 	return this;
 }

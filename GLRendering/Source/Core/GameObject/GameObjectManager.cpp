@@ -27,11 +27,7 @@ void GameObjectManager::render(Camera* camera, Renderer * renderer)
 {
 	for (auto gObj : p_gameObjects)
 	{
-		glm::vec3 diff = gObj->getPosition() - camera->getPosition();
-	
-		if (glm::length(diff) < 400.f)
-			renderer->processGameObject(gObj);
-	
+		renderer->processGameObject(gObj);
 	}
 }
 

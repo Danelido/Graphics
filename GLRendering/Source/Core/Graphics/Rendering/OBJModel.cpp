@@ -49,3 +49,14 @@ const MeshTexture * OBJModel::meshTexture() const
 {
 	return this->p_meshTexture;
 }
+
+bool operator==(const OBJModel& m1, const OBJModel& m2)
+{
+	if (m1.p_meshTexture->getTextureID() == m2.p_meshTexture->getTextureID()
+		&& m1.p_rawMesh->getVAO() == m2.p_rawMesh->getVAO())
+	{
+		return true;
+	}
+
+	return false;
+}
