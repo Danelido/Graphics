@@ -1,0 +1,3 @@
+[submodule "GLRendering/vendor"]
+	path = GLRendering/vendor
+	url = https://github.com/gabime/spdlog
