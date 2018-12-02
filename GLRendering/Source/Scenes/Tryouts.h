@@ -1,7 +1,6 @@
 #ifndef TRYOUTSH
 #define TRYOUTSH
 #include "Scene.h"
-#include "../Core/Graphics/Shaders/TestShader.h"
 #include "../Core/Camera/Camera.h"
 #include "../Core/Graphics/Rendering/Renderer/Renderer.h"
 #include "../Core/GameObject/GameObjectManager.h"
@@ -20,6 +19,8 @@ private:
 
 	float fogStart;
 	float fogEnd;
+	float specularStrengthFactor;
+	float specEnd;
 
 public:
 	Tryouts();

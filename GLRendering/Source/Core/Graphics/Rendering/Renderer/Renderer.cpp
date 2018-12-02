@@ -5,16 +5,16 @@ Renderer::Renderer()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
-	enableCulling();
+	enableBackFaceCulling();
 	fogStart = 0.f;
 	fogEnd = 0.f;
-	this->p_skyColor = glm::vec3(60.f / 255.f, 57.f / 255.f, 111.f / 255.f);
+	this->p_skyColor = glm::vec3(0.f);
 	this->p_gameObjectShader = new GameObjectShader();
 	this->p_gameObjectShader->use();
 	this->p_gameObjectShader->setProjectionMatrix(CreateMatrix::PerspectiveProjectionMatrix(1280.f, 720.f, 0.1f, 1000.f));
 
 	p_goRenderModule = new GORenderModule(this->p_gameObjectShader);
-
+	p_skyBox = new SkyBox();
 
 }
 
@@ -22,6 +22,7 @@ Renderer::~Renderer()
 {
 	delete this->p_goRenderModule;
 	delete this->p_gameObjectShader;
+	delete this->p_skyBox;
 }
 
 const long int & Renderer::getNrOfVertices() const
@@ -31,7 +32,7 @@ const long int & Renderer::getNrOfVertices() const
 
 void Renderer::processGameObject(GameObject* gameObject)
 {
-
+	
 	for (auto& map : p_gameObjectMap)
 	{
 		if (*map.first == *gameObject->getModel())
@@ -48,14 +49,26 @@ void Renderer::processGameObject(GameObject* gameObject)
 	
 }
 
-void Renderer::render(const Camera & camera, const std::vector<Light*>* lights)
+void Renderer::renderSkybox(const Camera & camera)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDepthMask(GL_FALSE);
+	disableBackFaceCulling();
+	enableFrontFaceCulling();
+	p_skyBox->setFogColor(p_skyColor);
+	p_skyBox->render(&camera);
+	glDepthMask(GL_TRUE);
+	disableFrontFaceCulling();
+	enableBackFaceCulling();
+}
 
+void Renderer::renderGameObjects(const Camera & camera, const std::vector<Light*>* lights)
+{
 	// Use entity shader
 	this->p_gameObjectShader->use();
 	this->p_gameObjectShader->setFogStart(fogStart);
 	this->p_gameObjectShader->setFogEnd(fogEnd);
+	this->p_gameObjectShader->setSpecularStrength(specularStrengthFactor);
+	this->p_gameObjectShader->setSpecularEnd(specEnd);
 
 	if (lights)
 	{
@@ -67,10 +80,15 @@ void Renderer::render(const Camera & camera, const std::vector<Light*>* lights)
 	this->p_gameObjectShader->setViewMatrix(CreateMatrix::viewMatrix(camera));
 
 	this->p_goRenderModule->render(this->p_gameObjectMap);
-	
 	this->p_gameObjectShader->unuse();
-	
 	this->p_gameObjectMap.clear();
+}
+
+void Renderer::render(const Camera & camera, const std::vector<Light*>* lights)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	renderSkybox(camera);
+	renderGameObjects(camera, lights);
 }
 
 void Renderer::setSkyColor(glm::vec3 skyCol)
@@ -94,13 +112,39 @@ void Renderer::setFogEnd(const float & fogEnd)
 	this->fogEnd = fogEnd;
 }
 
-void Renderer::enableCulling()
+void Renderer::setSpecularStrength(const float& factor)
+{
+	this->specularStrengthFactor = factor;
+}
+
+void Renderer::setSpecEnd(const float& specEnd)
+{
+	this->specEnd = specEnd;
+}
+
+void Renderer::enableBackFaceCulling()
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 }
 
-void Renderer::disableCulling()
+void Renderer::disableBackFaceCulling()
 {
 	glDisable(GL_CULL_FACE);
+}
+
+void Renderer::enableFrontFaceCulling()
+{
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+}
+
+void Renderer::disableFrontFaceCulling()
+{
+	glDisable(GL_CULL_FACE);
+}
+
+const float& Renderer::getFogEnd() const
+{
+	return this->fogEnd;
 }

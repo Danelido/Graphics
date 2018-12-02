@@ -10,6 +10,7 @@
 #include "Vendor/ImGui/imgui.h"
 #include "Vendor/ImGui/imgui_impl_glfw.h"
 #include "Vendor/ImGui/imgui_impl_opengl3.h"
+#include "Vendor/SpdLog/Log.h"
 Application::Application()
 {
 }
@@ -21,14 +22,22 @@ Application::~Application()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
+	
 }
 
 bool Application::initialize(const char * appTitle, uint16_t appWidth, uint16_t appHeight)
 {
+
+	Log::initialize();
+	//p_log->initialize();
+	LOG_INFO("Initializing Application");
 	/*GLFW Procedure*/
 	if (!glfwInit()) {
-		printf("%s\n", "Failed to initialize GLFW");
+		LOG_ERROR("Failed to initialize GLFW");
 		return false;
+	}
+	else{
+		LOG_INFO("GLFW initialized");
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -43,8 +52,11 @@ bool Application::initialize(const char * appTitle, uint16_t appWidth, uint16_t 
 	
 	if (!this->p_window) {
 		glfwTerminate();
-		printf("%s\n", "Failed to create GLFW-Window");
+		LOG_ERROR("Failed to initialize GLFW - Window");
 		return false;
+	}
+	else {
+		LOG_INFO("GLFW - Window initialized");
 	}
 
 	/*GLFW-OPENGL Procedure*/
@@ -53,12 +65,18 @@ bool Application::initialize(const char * appTitle, uint16_t appWidth, uint16_t 
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
 		glfwTerminate();
-		printf("%s%d\n", "Failed to initialize GLEW. Error code: ", err);
+		LOG_ERROR("Failed to initialize GLEW, error code: {0}", err);
 		return false;
+	}
+	else {
+		LOG_INFO("GLEW initialized");
 	}
 
 	/*Create input manager*/
 	this->p_inputManager = new InputManager();
+	LOG_INFO("Input manager created");
+	
+
 
 	/*Initialize Resource & MeshLoader class ( Singletons )*/
 	Resources::Resources();
@@ -67,21 +85,19 @@ bool Application::initialize(const char * appTitle, uint16_t appWidth, uint16_t 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(p_window, true);
 	ImGui_ImplOpenGL3_Init("#version 410 core");
-	// Setup Style
-	//ImGui::StyleColorsDark();
 	ImGui::StyleColorsLight();
-	//ImGui::StyleColorsClassic();
+	LOG_INFO("ImGui initialized");
+	
 
 	/*Scene Creation*/
 	this->p_scene = new Tryouts();
+	LOG_INFO("Scene created");
 	
+
 	// Vsync enabled
 	glfwSwapInterval(1);
 	glfwSetInputMode(this->p_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

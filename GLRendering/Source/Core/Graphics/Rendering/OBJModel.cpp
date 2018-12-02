@@ -1,7 +1,7 @@
 #include "OBJModel.h"
 #include "../Setup/MeshLoaderSingleton.h"
 #include "../Resource/Resources.h"
-
+#include "../../Vendor/SpdLog/Log.h"
 OBJModel::OBJModel(const std::string & objFile, const std::string & textureFile)
 {
 
@@ -9,18 +9,17 @@ OBJModel::OBJModel(const std::string & objFile, const std::string & textureFile)
 
 	if (this->p_rawMesh == nullptr) 
 	{
-		// Debug
-		printf("Added raw mesh to resources: %s\n", objFile.c_str());
+		LOG_INFO("(Raw mesh) {0} added to resources", objFile.c_str());
 		parser = new ParserOBJ();
 		parser->loadFromFile("Resources/Models/" + objFile);
+
 
 		this->p_rawMesh = MeshLoaderSingleton::Loader.createRawMesh(
 			parser->getVertices(), parser->getTextureCoordinates(),
 			parser->getNormals(), parser->getIndices()
 		);
-
+		delete this->parser;
 		Resources::addRawMesh(objFile, this->p_rawMesh);
-
 	}
 
 	this->p_meshTexture = Resources::getMeshTexture(textureFile);
@@ -28,7 +27,7 @@ OBJModel::OBJModel(const std::string & objFile, const std::string & textureFile)
 	if (this->p_meshTexture == nullptr)
 	{
 		// Debug
-		printf("Added mesh texture to resources: %s\n", textureFile.c_str());
+		LOG_INFO("(Mesh texture) {0} added to resources", textureFile.c_str());
 		this->p_meshTexture = MeshLoaderSingleton::Loader.createMeshTexture("Resources/Textures/" + textureFile);
 		Resources::addMeshTexture(textureFile, this->p_meshTexture);
 	}
@@ -37,7 +36,7 @@ OBJModel::OBJModel(const std::string & objFile, const std::string & textureFile)
 
 OBJModel::~OBJModel()
 {
-	delete this->parser;
+	
 }
 
 const RawMesh * OBJModel::rawMesh() const

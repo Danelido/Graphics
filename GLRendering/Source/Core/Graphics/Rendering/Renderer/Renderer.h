@@ -8,17 +8,24 @@
 #include "SubRenderers/GORenderModule.h"
 #include <GLM/glm.hpp>
 #include <map>
+#include "../SkyBox.h"
 
 class Renderer {
 private:
 	glm::vec3 p_skyColor;
 	GORenderModule* p_goRenderModule;
 	GameObjectShader*	p_gameObjectShader;
-
+	SkyBox* p_skyBox;
 	std::map<const OBJModel*, std::vector<GameObject*>> p_gameObjectMap;
 
 	float fogStart;
 	float fogEnd;
+	float specularStrengthFactor;
+	float specEnd;
+
+
+	void renderSkybox(const Camera & camera);
+	void renderGameObjects(const Camera & camera, const std::vector<Light*>* lights);
 
 public:
 
@@ -35,8 +42,14 @@ public:
 
 	void setFogStart(const float& fogStart);
 	void setFogEnd(const float& fogEnd);
-	static void enableCulling();
-	static void disableCulling();
+	void setSpecularStrength(const float& factor);
+	void setSpecEnd(const float& specEnd);
+	const float& getFogEnd() const;
+	
+	static void enableBackFaceCulling();
+	static void disableBackFaceCulling();
+	static void enableFrontFaceCulling();
+	static void disableFrontFaceCulling();
 
 };
 

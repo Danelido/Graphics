@@ -32,11 +32,12 @@ Tryouts::Tryouts()
 	p_skyColor = renderer->getSkyColor();
 		
 	objectManager->addObject(new WorldPlane());
+	
 	float cubeScale = 6.f;
 	for (int i = 0; i < 100.f; i++)
 	{
 		objectManager->addObject(new Cube(
-			glm::vec3(RandomNum::getRandomNumber(-400.f, 400.f), cubeScale, RandomNum::getRandomNumber(-400.f, 400.f)),
+			glm::vec3(RandomNum::getRandomNumber(-500.f, 500.f), cubeScale, RandomNum::getRandomNumber(-500.f, 500.f)),
 			glm::vec3(0.f),
 			cubeScale
 			));
@@ -53,7 +54,10 @@ Tryouts::Tryouts()
 	objectManager->addObject(lightCube);
 	
 	fogStart = 1.f;
-	fogEnd = 600.f;
+	fogEnd = 350.f;
+	specularStrengthFactor = 0.5f;
+	specEnd = 65.f;
+
 
 }
 
@@ -83,6 +87,8 @@ Scene * Tryouts::renderImGui()
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::SliderFloat("FogStart", &fogStart, 1.f, fogEnd);
 	ImGui::SliderFloat("FogEnd", &fogEnd, fogStart, 1000.f);
+	ImGui::SliderFloat("Specular strength", &specularStrengthFactor, 0.0f, 1.0f);
+	ImGui::SliderFloat("Specular distance factor", &specEnd, 0.0f, 500.0f);
 	ImGui::Checkbox("Vsync", &Vsync);
 	ImGui::End();
 
@@ -112,6 +118,8 @@ Scene* Tryouts::render()
 	renderer->setSkyColor(p_skyColor);
 	renderer->setFogStart(fogStart);
 	renderer->setFogEnd(fogEnd);
+	renderer->setSpecularStrength(specularStrengthFactor);
+	renderer->setSpecEnd(specEnd);
 	renderer->render(*camera, &lightManager->getLights());
 	return this;
 }

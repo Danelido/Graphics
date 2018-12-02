@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include "../Vendor/SpdLog/Log.h"
 constexpr auto INITIAL_CAPACITY = 1000;
 
 ParserOBJ::ParserOBJ()
@@ -19,8 +19,6 @@ ParserOBJ::~ParserOBJ()
 
 bool ParserOBJ::loadFromFile(const std::string & filename)
 {
-	
-
 	// This is what will be filled during the reading
 	std::vector<GLfloat> fillBuffer_vertices;				fillBuffer_vertices.reserve(INITIAL_CAPACITY);
 	std::vector<GLfloat> fillBuffer_textureCoordinates;		fillBuffer_textureCoordinates.reserve(INITIAL_CAPACITY);
@@ -38,9 +36,12 @@ bool ParserOBJ::loadFromFile(const std::string & filename)
 
 	std::ifstream file(filename);
 	if (!file.is_open()){
-		printf("Couldn't find file %s\n", filename.c_str());
+		LOG_ERROR("{0} not found", filename.c_str());
 		return false;
 	}
+
+	LOG_INFO("Parsing {0}", filename.c_str());
+
 	std::string line;
 
 	while (std::getline(file, line)) {

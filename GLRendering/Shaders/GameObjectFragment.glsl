@@ -19,6 +19,9 @@ out vec4 color;
 uniform sampler2D textureSampler;
 uniform float u_fogStart;
 uniform float u_fogEnd;
+uniform float u_specularStrength;
+uniform float u_specEnd;
+
 
 void main()
 {
@@ -40,14 +43,19 @@ void main()
 
 
 		/* SPECULAR */
-		float specularStrength = 0.5f;
+		// Just in case clamp it
+
+		float specularStrength = u_specularStrength;
 		vec3 toCamera = f_cameraPosition - f_objPosition;
 		vec3 reflectDir = reflect(-normalize(toLight), normalize(f_normal));
 		float spec = dot(normalize(toCamera), normalize(reflectDir));
 		spec = max(spec, 0.0f);
 		spec = pow(spec,32);
-		
-		vec3 specular = specularStrength * spec * f_lights[i].lightColor;
+
+		float specDist = length((f_cameraPosition - f_lights[i].lightPosition));
+		float specFactor = 1.f - clamp((specDist - u_specEnd) / (max(specDist, 0.001f)), 0.f, 1.f);
+
+		vec3 specular = specularStrength * spec * f_lights[i].lightColor * specFactor;
 
 		/* FINAL COLOR */
 		finalColor += vec4((diffuse + specular), 0.f);

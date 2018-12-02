@@ -22,12 +22,15 @@ void GameObjectManager::update(float dt)
 		gObj->update(dt);
 	}
 }
-
+#include "Objects/WorldPlane.h"
 void GameObjectManager::render(Camera* camera, Renderer * renderer)
 {
+	
 	for (auto gObj : p_gameObjects)
-	{
-		renderer->processGameObject(gObj);
+	{	
+		float dist = glm::length(gObj->getPosition() - camera->getPosition());
+		if(dist < renderer->getFogEnd() || dynamic_cast<WorldPlane*>(gObj) != nullptr)
+			renderer->processGameObject(gObj);
 	}
 }
 

@@ -11,7 +11,6 @@ private:
 	std::vector<GLuint*> p_vaos;
 	std::vector<GLuint*> p_vbos;
 	std::vector<GLuint*> p_textures;
-
 private:
 	/*Behind the scene functions*/
 	GLuint createAndBindVAO();
@@ -25,8 +24,10 @@ public:
 	RawMesh* createRawMesh(const std::vector<GLfloat>& positionVec, const std::vector<GLfloat>& textureCoordinateVec,
 		const std::vector<GLfloat>& normalVec, const std::vector<GLuint>& indicesVec);
 	
-	MeshTexture* createMeshTexture(const std::string& filename);
+	RawMesh* createCubeMapRawMesh(const std::vector<GLfloat>& positionVec, const std::vector<GLuint>& indicesVec);
 
+	MeshTexture* createMeshTexture(const std::string& filename);
+	MeshTexture* createCubeMapTexture(const std::vector<std::string> files);
 	
 
 };

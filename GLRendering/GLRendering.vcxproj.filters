@@ -72,9 +72,6 @@
     <ClCompile Include="Source\Core\Graphics\Shaders\GameObjectShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Graphics\Shaders\TestShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Graphics\Vendor\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,6 +106,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\GameObject\Objects\Worldplane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Graphics\Rendering\SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Graphics\Shaders\SkyBoxShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Vendor\SpdLog\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,9 +173,6 @@
     <ClInclude Include="Source\Core\Graphics\Shaders\GameObjectShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Graphics\Shaders\TestShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Graphics\Vendor\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -224,20 +227,25 @@
     <ClInclude Include="Source\Core\GameObject\Objects\WorldPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Graphics\Rendering\SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Graphics\Shaders\SkyBoxShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Vendor\SpdLog\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
     <None Include="Shaders\GameObjectFragment.glsl" />
     <None Include="Shaders\GameObjectVertex.glsl" />
+    <None Include="Shaders\SkyBoxVertex.glsl" />
+    <None Include="Shaders\SkyBoxFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\Bear.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Resources\Textures\Grass.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Resources\Textures\LightWood.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resources\Textures\TempTexture.png">

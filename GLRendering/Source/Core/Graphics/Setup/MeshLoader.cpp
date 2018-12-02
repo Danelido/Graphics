@@ -74,6 +74,19 @@ RawMesh * MeshLoader::createRawMesh(const std::vector<GLfloat>& positionVec, con
 	return mesh;
 }
 
+RawMesh* MeshLoader::createCubeMapRawMesh(const std::vector<GLfloat>& positionVec, const std::vector<GLuint>& indicesVec)
+{
+	GLuint VAO = createAndBindVAO();
+	bindIndices(indicesVec);
+	storeDataInAttributeList(0, 3, positionVec);
+	unbindVAO();
+	this->p_vaos.push_back(&VAO);
+
+	RawMesh* mesh = new RawMesh(VAO, static_cast<GLuint>(indicesVec.size()));
+	return mesh;
+}
+
+
 MeshTexture * MeshLoader::createMeshTexture(const std::string & filename)
 {
 	GLint width;
@@ -105,6 +118,49 @@ MeshTexture * MeshLoader::createMeshTexture(const std::string & filename)
 
 	MeshTexture* meshTexture = new MeshTexture(textureID);
 
+
+	return meshTexture;
+}
+
+
+/*	IMPORTANT!
+	LOAD TEXTURES TO THE CUBE MAP VECTOR IN THIS ORDER!!
+	1. Right
+	2. Left
+	3. Top
+	4. Bottom
+	5. Back
+	6. Front
+*/
+MeshTexture* MeshLoader::createCubeMapTexture(const std::vector<std::string> files)
+{
+	GLint width;
+	GLint height;
+	GLint channels;
+
+	// load in texture
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	stbi_set_flip_vertically_on_load(0);
+	
+	for (size_t i = 0; i < files.size(); i++)
+	{
+		unsigned char* imageData = stbi_load(files.at(i).c_str(), &width, &height, &channels, STBI_rgb);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+		stbi_image_free(imageData);
+	}
+	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+	this->p_textures.push_back(&textureID);
+	MeshTexture* meshTexture = new MeshTexture(textureID);
 
 	return meshTexture;
 }

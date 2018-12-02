@@ -1,4 +1,5 @@
 #include "Resources.h"
+#include "../../Vendor/SpdLog/Log.h"
 
 // Static initializing
 std::map<std::string, const MeshTexture*> Resources::p_textureMap;
@@ -27,7 +28,7 @@ const MeshTexture * Resources::getMeshTexture(const std::string & filename)
 {
 	if (p_textureMap.find(filename) == p_textureMap.end())
 	{
-		printf("Couldn't find mesh texture with ID: %s\n", filename.c_str());
+		LOG_WARNING("(Mesh texture) {0} is not stored in resources", filename.c_str());
 		return nullptr;
 	}
 	return p_textureMap[filename];
@@ -37,7 +38,7 @@ const RawMesh * Resources::getRawMesh(const std::string & filename)
 {
 	if (p_rawMap.find(filename) == p_rawMap.end())
 	{
-		printf("Couldn't find raw mesh with ID: %s\n", filename.c_str());
+		LOG_WARNING("(Raw mesh) {0} is not stored in resources", filename.c_str());
 		return nullptr;
 	}
 	return p_rawMap[filename];

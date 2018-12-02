@@ -22,6 +22,9 @@ private:
 	GLint fogStartLocation;
 	GLint fogEndLocation;
 
+	GLint specularStrengthLocation;
+	GLint specularEnd;
+
 	struct LightBlock {
 		GLint positionLocation;
 		GLint colorLocation;
@@ -40,6 +43,8 @@ public:
 	void setFogStart(const float& fogStart);
 	void setFogEnd(const float& fogEnd);
 	void setSkyColor(const glm::vec3& skyCol);
+	void setSpecularStrength(const float& factor);
+	void setSpecularEnd(const float& specEnd);
 };
 
 

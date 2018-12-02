@@ -14,7 +14,8 @@ GameObjectShader::GameObjectShader()
 	numberOfLightLocation = glGetUniformLocation(this->program(), "numberOfLights");
 	fogStartLocation = glGetUniformLocation(this->program(), "u_fogStart");
 	fogEndLocation = glGetUniformLocation(this->program(), "u_fogEnd");
-
+	specularStrengthLocation = glGetUniformLocation(this->program(), "u_specularStrength");
+	specularEnd = glGetUniformLocation(this->program(), "u_specEnd");
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
@@ -87,4 +88,13 @@ void GameObjectShader::setFogEnd(const float & fogEnd)
 void GameObjectShader::setSkyColor(const glm::vec3 & skyCol)
 {
 	glUniform3f(skyColorLocation, skyCol.x, skyCol.y, skyCol.z);
+}
+void GameObjectShader::setSpecularStrength(const float& factor)
+{
+	glUniform1f(specularStrengthLocation, factor);
+}
+
+void GameObjectShader::setSpecularEnd(const float& specEnd)
+{
+	glUniform1f(specularEnd, specEnd);
 }

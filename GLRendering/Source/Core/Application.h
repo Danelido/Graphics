@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include "../Scenes/Scene.h"
 #include "Input/InputManager.h"
-
 class Application
 {
 private:
@@ -12,9 +11,8 @@ private:
 	uint16_t	p_windowWidth;
 	uint16_t	p_windowHeight;
 	char*		p_windowTitle;
-
 	Scene*		p_scene;
-	
+
 	InputManager* p_inputManager;
 	// For delta
 	double p_currentFrame;

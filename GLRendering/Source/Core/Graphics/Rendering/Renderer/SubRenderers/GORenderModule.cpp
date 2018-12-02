@@ -43,7 +43,7 @@ void GORenderModule::prepareModel(const OBJModel * model)
 		CHECKGLERROR(glEnableVertexAttribArray(static_cast<GLint>(i)));
 	}
 	if (model->meshTexture()->hasTransparency())
-		Renderer::disableCulling();
+		Renderer::disableBackFaceCulling();
 
 	CHECKGLERROR(glActiveTexture(GL_TEXTURE0));
 	CHECKGLERROR(glBindTexture(GL_TEXTURE_2D, model->meshTexture()->getTextureID()));
@@ -51,7 +51,7 @@ void GORenderModule::prepareModel(const OBJModel * model)
 
 void GORenderModule::doneWithModel()
 {
-	Renderer::enableCulling();
+	Renderer::enableBackFaceCulling();
 	for (size_t i = 0; i < 3; i++) {
 		CHECKGLERROR(glDisableVertexAttribArray(static_cast<GLint>(i)));
 	}
