@@ -17,3 +17,9 @@ Cached the model matrix for each game object and re-used that if the position, r
 which increased the overall performance.<br>
 Added some fog.<br>
 ![untitled](https://user-images.githubusercontent.com/24975339/49184201-0cfab600-f35f-11e8-966a-c4efe733e411.png)
+
+# Update 02/12-2018
+Added a skybox (cube map) that rotates around y-axis.<br>
+Made the fog mix itself with the skybox to still give the illusion of fog.<br>
+Added spdlog to my project. <href> https://github.com/gabime/spdlog </href><br>
+![untitled](https://user-images.githubusercontent.com/24975339/49342488-4f244000-f65c-11e8-8139-c4d6142f6bfd.png)
